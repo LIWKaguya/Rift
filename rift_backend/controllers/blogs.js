@@ -13,7 +13,7 @@ const getToken = (req) => {
 }
 
 blogsRouter.get('/', async(_, res) => {
-	const blogs = await Blog.find({}).populate('user')
+	const blogs = await Blog.find({}).populate('user', {username : 1, name : 1})
 
 	res.json(blogs)
 })
@@ -32,6 +32,7 @@ blogsRouter.post('/', async (req, res) => {
 	const { content } = req.body
     
 	const token = getToken(req)
+	console.log(token)
 	const decodedToken = jwt.verify(token, process.env.SECRET)
 	if(!token || !decodedToken.id) {
 		return res.status(401).json({
