@@ -18,7 +18,15 @@ usersRouter.post('/', async (req, res) => {
 		})
 	}
 
-	const saltRounds = 11
+	console.log(name)
+
+	if(!name) {
+		return res.status(400).json({
+			error: 'user must have a name'
+		})
+	}
+
+	const saltRounds = 7
 	const passwordHash = await bcrypt.hash(password, saltRounds)
 
 	const user = new User({
