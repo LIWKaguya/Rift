@@ -21,8 +21,8 @@ const upload = async (blog) => {
     return response.data
 }
 
-const like = async (blog) => {
-    const response = await axios.put(`${url}/blogs/${blog.id}/likes`)
+const like = async ({ id }) => {
+    const response = await axios.put(`${url}/blogs/${id}/likes`)
     return response.data
 }
 

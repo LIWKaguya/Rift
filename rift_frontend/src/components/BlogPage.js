@@ -8,7 +8,7 @@ const BlogPage = ({ blogs, user, handleLogOut, setBlogs }) => {
         <>
             <h1>Blog app</h1>
             <h2>{user.username} logged in<button onClick={handleLogOut}>Logout</button></h2> 
-            { blogs.map(blog => <Blog key={blog.id} blog={blog} user={user} />) }
+            { blogs.map(blog => <Blog key={blog.id} blog={blog} user={user} blogs={blogs} setBlogs={setBlogs} />) }
             <NewBlogForm blogs={blogs} setBlogs={setBlogs}/>
         </>
     )

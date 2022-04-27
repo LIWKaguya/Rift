@@ -1,8 +1,11 @@
 import blogService from '../services/blogs'
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, blogs, setBlogs }) => {
     const likeThis = async () => {
-        await blogService.like(blog)
+        const likedBlog = await blogService.like({
+            id : blog.id
+        })
+        setBlogs(blogs.map(blog => blog.id === likedBlog.id ? likedBlog : blog))
     }
 
     const blogStyle = {
