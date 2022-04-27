@@ -10,8 +10,7 @@ blogsRouter.get('/', async(_, res) => {
 })
 
 blogsRouter.get('/:id', async (req, res) => {
-	const blog = await Blog.findById(req.params.id)
-
+	const blog = await Blog.findById(req.params.id).populate('user', {username : 1, name : 1})
 	if(blog) {
 		res.json(blog.toJSON())
 	} else {
@@ -43,23 +42,47 @@ blogsRouter.delete('/:id', middleware.userExtractor, async (req, res) => {
 	const blog = await Blog.findById(req.params.id)
 	if(blog.user.toString() == user.id) {
 		await blog.remove()
-		return res.status(204).end()
+		return res.status(204).json({
+			'notification' : 'suscessfully deleted'
+		})
 	}
 	return res.status(403).json({
 		error: 'user is not allowed'
 	})
 })
 
-blogsRouter.put('/:id', async (req, res) => {
-	const { content } = req.body
-	const foundBlog = await Blog.findById(req.params.id)
-	const blog = {
-		...foundBlog,
-		content
+blogsRouter.put('/:id', middleware.userExtractor, async (req, res) => {
+	const { content, likes,  title, comments } = req.body
+	const { user } = req
+	const blog = await Blog.findById(req.params.id)
+	if(blog.user.toString() == user.id) {
+		const updatedBlog =  {
+			content,
+			likes,
+			title,
+			comments,
+			user
+		}
+		const newBlog = await Blog.findByIdAndUpdate(req.params.id, updatedBlog, {new: true})
+		res.status(200).json(newBlog)
 	}
+	return res.status(403).json({
+		error: 'user is not allowed'
+	})
+})
 
-	const updatedBlog = await Blog.findByIdAndUpdate(req.params.id, blog, {new: true})
-	res.json(updatedBlog)
+blogsRouter.put('/:id/likes', async (req, res) => {
+	const { content, likes,  title, comments, user } = req.body
+	const updatedBlog = {
+		content,
+		likes: likes+1,
+		title,
+		comments,
+		user
+	}
+	const newBlog = await Blog.findByIdAndUpdate(req.params.id, updatedBlog, {new: true})
+	console.log(newBlog)
+	res.status(200).json(newBlog)
 })
 
 module.exports = blogsRouter
