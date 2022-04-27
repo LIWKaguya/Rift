@@ -21,6 +21,11 @@ const upload = async (blog) => {
     return response.data
 }
 
-const object = { getAll, setToken, upload }
+const like = async (blog) => {
+    const response = await axios.put(`${url}/blogs/${blog.id}/likes`)
+    return response.data
+}
+
+const object = { getAll, setToken, upload, like }
 
 export default object
