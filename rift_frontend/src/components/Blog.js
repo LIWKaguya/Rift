@@ -1,11 +1,21 @@
 import blogService from '../services/blogs'
 
-const Blog = ({ blog, blogs, setBlogs }) => {
+const Blog = ({ blog, blogs, setBlogs, user }) => {
     const likeThis = async () => {
         const likedBlog = await blogService.like({
             id : blog.id
         })
-        setBlogs(blogs.map(blog => blog.id === likedBlog.id ? likedBlog : blog))
+        setBlogs(blogs.map(b => b.id === likedBlog.id ? likedBlog : b))
+    }
+
+    const handleDelete = async () => {
+        const ok = window.confirm(`Do you want to delete "${blog.title}" ?`)
+        if(ok) {
+            setBlogs(blogs.filter(b => b.id !== blog.id))
+            await blogService.clearThis({
+                id : blog.id
+            })
+        }
     }
 
     const blogStyle = {
@@ -19,7 +29,8 @@ const Blog = ({ blog, blogs, setBlogs }) => {
     return (
         <div style={blogStyle}>
             {blog.title} by {blog.user.username} <br />
-            likes : {blog.likes} <button onClick={likeThis}>Like</button>
+            likes : {blog.likes} <button onClick={likeThis}>Like</button> <br />
+            {user.username === blog.user.username ? <button onClick={handleDelete}>Delete</button> : <></>}
         </div>
     )
 }
