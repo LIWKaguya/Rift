@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import BlogPage from './components/BlogPage';
 import LoginForm from './components/LoginForm';
 import RegisterForm from './components/RegisterForm';
 import blogService from './services/blogs'
 import userService from './services/users'
 import loginService from './services/login'
+import Togglable from './components/Togglable';
 
 const App = () => {
     const [blogs, setBlogs] = useState([])
@@ -14,6 +15,9 @@ const App = () => {
     const [registerUsername, setRegisterUsername] = useState('')
     const [registerPassword, setRegisterPassword] = useState('')
     const [user, setUser] = useState(null)
+
+    const registerFormRef = useRef()
+    const loginFormRef = useRef()
 
     useEffect(() => {
         blogService.getAll().then(blogs => {
@@ -83,20 +87,24 @@ const App = () => {
             { 
             user === null ? 
                 <>
-                    <LoginForm 
-                        handleLogin={handleLogin}
-                        username={username}
-                        setUsername={setUsername}
-                        password={password}
-                        setPassword={setPassword} /> 
-                    <RegisterForm
-                        handleRegister={handleRegister}
-                        registerUsername={registerUsername}
-                        setRegisterUsername={setRegisterUsername}
-                        registerPassword={registerPassword}
-                        setRegisterPassword={setRegisterPassword}
-                        name={name}
-                        setName={setName} />
+                    <Togglable buttonLabel='Login' cancelLabel='Cancel' ref={loginFormRef}>
+                        <LoginForm 
+                            handleLogin={handleLogin}
+                            username={username}
+                            setUsername={setUsername}
+                            password={password}
+                            setPassword={setPassword} /> 
+                    </Togglable>
+                    <Togglable buttonLabel='Register' cancelLabel='Cancel' ref={registerFormRef}>
+                        <RegisterForm
+                            handleRegister={handleRegister}
+                            registerUsername={registerUsername}
+                            setRegisterUsername={setRegisterUsername}
+                            registerPassword={registerPassword}
+                            setRegisterPassword={setRegisterPassword}
+                            name={name}
+                            setName={setName} />
+                    </Togglable>
                 </>
                 : 
                 <BlogPage 
