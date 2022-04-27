@@ -42,9 +42,7 @@ blogsRouter.delete('/:id', middleware.userExtractor, async (req, res) => {
 	const blog = await Blog.findById(req.params.id)
 	if(blog.user.toString() == user.id) {
 		await blog.remove()
-		return res.status(204).json({
-			'notification' : 'suscessfully deleted'
-		})
+		return res.status(204).end()
 	}
 	return res.status(403).json({
 		error: 'user is not allowed'
@@ -52,16 +50,16 @@ blogsRouter.delete('/:id', middleware.userExtractor, async (req, res) => {
 })
 
 blogsRouter.put('/:id', middleware.userExtractor, async (req, res) => {
-	const { content, likes,  title, comments } = req.body
+	const { content } = req.body
 	const { user } = req
 	const blog = await Blog.findById(req.params.id)
 	if(blog.user.toString() == user.id) {
 		const updatedBlog =  {
+			title: blog.title,
 			content,
-			likes,
-			title,
-			comments,
-			user
+			likes: blog.likes,
+			user: blog.user,
+			comments: blog.comments
 		}
 		const newBlog = await Blog.findByIdAndUpdate(req.params.id, updatedBlog, {new: true})
 		res.status(200).json(newBlog)
@@ -72,13 +70,13 @@ blogsRouter.put('/:id', middleware.userExtractor, async (req, res) => {
 })
 
 blogsRouter.put('/:id/likes', async (req, res) => {
-	const { content, likes,  title, comments, user } = req.body
+	const blog = await Blog.findById(req.params.id)
 	const updatedBlog = {
-		content,
-		likes: likes+1,
-		title,
-		comments,
-		user
+		title: blog.title,
+		content: blog.content,
+		likes: blog.likes+1,
+		comments: blog.comments,
+		user: blog.user
 	}
 	const newBlog = await Blog.findByIdAndUpdate(req.params.id, updatedBlog, {new: true})
 	console.log(newBlog)
