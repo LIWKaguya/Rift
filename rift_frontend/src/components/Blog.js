@@ -1,7 +1,7 @@
 const Blog = ({ blog }) => {
     return (
         <div>
-            <p>{blog.content} by {blog.user.username}</p>
+            <p>{blog.title} by {blog.user.username}</p>
         </div>
     )
 }
