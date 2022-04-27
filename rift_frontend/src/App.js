@@ -110,6 +110,7 @@ const App = () => {
                 <BlogPage 
                     user={user}
                     blogs={blogs}
+                    setBlogs={setBlogs}
                     handleLogOut={handleLogOut} />
             }
         </>

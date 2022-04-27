@@ -13,6 +13,14 @@ const getAll =  async () => {
     return response.data
 }
 
-const object = { getAll, setToken }
+const upload = async (blog) => {
+    const config = {
+        headers: { Authorization: token }
+    }
+    const response = await axios.post(`${url}/blogs`, blog, config)
+    return response.data
+}
+
+const object = { getAll, setToken, upload }
 
 export default object
