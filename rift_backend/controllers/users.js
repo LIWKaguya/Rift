@@ -3,7 +3,7 @@ const usersRouter = require('express').Router()
 const User = require('../models/user')
 
 usersRouter.get('/', async(_, res) => {
-	const users = await User.find({}).populate('blogs', {content : 1, likes : 1, comments: 1})
+	const users = await User.find({}).populate('blogs', {title: 1, content : 1, likes : 1, comments: 1})
 
 	res.json(users)
 })
@@ -17,8 +17,6 @@ usersRouter.post('/', async (req, res) => {
 			error: 'username must be unique'
 		})
 	}
-
-	console.log(name)
 
 	if(!name) {
 		return res.status(400).json({
