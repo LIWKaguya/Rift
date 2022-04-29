@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import BlogPage from './components/BlogPage';
 import LoginForm from './components/LoginForm';
 import RegisterForm from './components/RegisterForm';
-import blogsService from './services/blogs'
-import usersService from './services/users'
+import blogService from './services/blogs'
+import userService from './services/users'
 import loginService from './services/login'
 import Togglable from './components/Togglable';
 
@@ -20,7 +20,7 @@ const App = () => {
     const loginFormRef = useRef()
 
     useEffect(() => {
-        blogsService.getAll().then(blogs => {
+        blogService.getAll().then(blogs => {
             setBlogs(blogs)
         })
     }, [])
@@ -30,14 +30,14 @@ const App = () => {
         if(loggedUser) {
             const user = JSON.parse(loggedUser)
             setUser(user)
-            blogsService.setToken(user.token)
+            blogService.setToken(user.token)
         }
     }, [])
 
     const handleRegister = async (event) => {
         event.preventDefault()
         try {
-            await usersService.register({
+            await userService.register({
                 username: registerUsername,
                 name,
                 password: registerPassword
@@ -47,7 +47,7 @@ const App = () => {
                 password : registerPassword
             })
             setUser(user)
-            blogsService.setToken(user.token)
+            blogService.setToken(user.token)
             window.localStorage.setItem(
                 'loggedUser', JSON.stringify(user)
             )
@@ -66,7 +66,7 @@ const App = () => {
                 username, password
             })
             setUser(user)
-            blogsService.setToken(user.token)
+            blogService.setToken(user.token)
             window.localStorage.setItem(
                 'loggedUser', JSON.stringify(user)
             )
