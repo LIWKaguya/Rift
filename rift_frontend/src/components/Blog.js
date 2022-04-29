@@ -27,11 +27,14 @@ const Blog = ({ blog, blogs, setBlogs, user }) => {
       }
 
     return (
-        <div style={blogStyle}>
-            {blog.title} by {blog.user.username} <br />
-            likes : {blog.likes} <button onClick={likeThis}>Like</button> <br />
-            {user.username === blog.user.username ? <button onClick={handleDelete}>Delete</button> : <></>}
-        </div>
+        <>
+            <div style={blogStyle}>
+                <strong>{blog.title} by {blog.user.username}</strong> <br />
+                <p> {blog.content} </p>
+                likes : {blog.likes} <button onClick={likeThis}>Like</button> <br />
+                {user.username === blog.user.username ? <button onClick={handleDelete}>Delete</button> : <></>}
+            </div>
+        </>
     )
 }
 
